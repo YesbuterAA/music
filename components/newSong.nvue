@@ -1,0 +1,116 @@
+<template>
+	<view class="tabs" style="height: 250upx;">
+		<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false"
+			:scroll-into-view="scrollInto" style="height: 100%;">
+			<view v-for="(tab,index) in tabs" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index"
+				@click="ontabtap">
+				<view class="recommend" style="width: 250upx; height: 250upx;">
+					<image :src="tab.picUrl" mode="widthFix" style="width: 100%;"></image>
+					<view class="text">
+						<view class="text_name">{{tab.name}}</view>
+					</view>
+				</view>
+				<!-- <text class="uni-tab-item-title"
+					:class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text> -->
+			</view>
+		</scroll-view>
+	</view>
+</template>
+<script>
+	export default {
+		components: {},
+		data() {
+			return {
+				tabIndex: 0,
+				tabBars: [],
+				scrollInto: "",
+				showTips: false,
+				navigateFlag: false,
+				pulling: false
+			}
+		},
+		props: ['tabs']
+	}
+</script>
+
+<style>
+	/* #ifndef APP-PLUS */
+	page {
+		width: 100%;
+		min-height: 100%;
+		display: flex;
+	}
+
+	/* #endif */
+
+	.tabs {
+		flex: 1;
+		flex-direction: column;
+		overflow: hidden;
+		/* #ifdef MP-ALIPAY || MP-BAIDU */
+		height: 100vh;
+		/* #endif */
+	}
+
+	.scroll-h {
+		width: 750rpx;
+		/* #ifdef H5 */
+		width: 100%;
+		/* #endif */
+		height: 80rpx;
+		flex-direction: row;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+		/* flex-wrap: nowrap; */
+		/* border-color: #cccccc;
+		border-bottom-style: solid;
+		border-bottom-width: 1px; */
+	}
+
+	.line-h {
+		height: 1rpx;
+		background-color: #cccccc;
+	}
+
+	.uni-tab-item {
+		/* #ifndef APP-PLUS */
+		display: inline-block;
+		/* #endif */
+		flex-wrap: nowrap;
+		padding-left: 10rpx;
+		padding-right: 10rpx;
+	}
+
+	.uni-tab-item-title {
+		color: #555;
+		font-size: 30rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		flex-wrap: nowrap;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+	}
+
+	.uni-tab-item-title-active {
+		color: #007AFF;
+	}
+
+	.recommend {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.recommend .text {
+		width: 100%;
+	}
+
+	.recommend>.text>.text_name {
+		font-size: 15upx;
+		width: 100%;
+		text-overflow: ellipsis;
+		overflow:hidden;
+		white-space:nowrap;
+	}
+</style>

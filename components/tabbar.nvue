@@ -1,0 +1,134 @@
+<template>
+	<view class="tabs" style="height: 300upx; padding-right: 50upx;">
+		<scroll-view id="tab-bar" class="scroll-h" :scroll-x="true" :show-scrollbar="false"
+			:scroll-into-view="scrollInto" style="height: 100%;">
+			<view v-for="(tab,index) in tabs" :key="tab.id" class="uni-tab-item" :data-current="index">
+				<view class="recommend" style="width: 170upx; height: 200upx;" @click="getRecommendId"
+					:data-id="tab.id">
+					<image :src="tab.picUrl" mode="widthFix" style="width: 100%;"></image>
+					<view class="text">
+						<view class="text_name">{{tab.name}}</view>
+					</view>
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+</template>
+<script>
+	export default {
+		components: {},
+		data() {
+			return {
+				tabIndex: 0,
+				tabBars: [],
+				scrollInto: "",
+				showTips: false,
+				navigateFlag: false,
+				pulling: false,
+			}
+		},
+		props: ['tabs'],
+		methods: {
+			getRecommendId(e) {
+				uni.navigateTo({
+					url: '../musicDetail/musicDetail?id='+e.currentTarget.dataset.id
+				})
+			}
+		}
+	}
+</script>
+
+<style lang="less">
+	/* #ifndef APP-PLUS */
+	page {
+		width: 100%;
+		min-height: 100%;
+		display: flex;
+	}
+
+	/* #endif */
+
+	.tabs {
+		flex: 1;
+		flex-direction: column;
+		overflow: hidden;
+		/* #ifdef MP-ALIPAY || MP-BAIDU */
+		height: 100vh;
+		/* #endif */
+	}
+
+	.scroll-h {
+		width: 750rpx;
+		/* #ifdef H5 */
+		width: 100%;
+		/* #endif */
+		height: 80rpx;
+		flex-direction: row;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+		/* flex-wrap: nowrap; */
+		/* border-color: #cccccc;
+		border-bottom-style: solid;
+		border-bottom-width: 1px; */
+	}
+
+	.line-h {
+		height: 1rpx;
+		background-color: #cccccc;
+	}
+
+	.uni-tab-item {
+		/* #ifndef APP-PLUS */
+		display: inline-block;
+		/* #endif */
+		flex-wrap: nowrap;
+		padding-left: 10rpx;
+		padding-right: 10rpx;
+	}
+	.uni-tab-item:nth-child(9){
+		margin-right: 30upx;
+	}
+	.uni-tab-item-title {
+		color: #555;
+		font-size: 30rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		flex-wrap: nowrap;
+		/* #ifndef APP-PLUS */
+		white-space: nowrap;
+		/* #endif */
+	}
+
+	.uni-tab-item-title-active {
+		color: #007AFF;
+	}
+
+	.recommend {
+		display: flex;
+		flex-direction: column;
+		border-radius: 20upx;
+		image{
+			border-radius: 20upx;
+		}
+	}
+
+	.recommend .text {
+		width: 100%;
+	}
+
+	.recommend>.text>.text_name {
+		font-size: 28upx;
+		width: 100%;
+		// height: 100upx;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		// font-size: 20upx !important;
+		// overflow: hidden !important;
+		// text-overflow: ellipsis !important;
+		// display: -webkit-box !important;
+		// -webkit-line-clamp: 2; //文字上限行
+		// -webkit-box-orient: vertical;
+	}
+</style>

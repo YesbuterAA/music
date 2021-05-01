@@ -1,0 +1,1 @@
+<view class="search_wrap data-v-039252a3"><navigator url="/pages/search/search" class="data-v-039252a3"><input type="text" value="" placeholder="{{keyWords}}" confirm-type="search" class="data-v-039252a3"/></navigator></view>

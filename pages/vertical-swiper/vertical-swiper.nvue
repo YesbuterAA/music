@@ -1,0 +1,205 @@
+<template>
+<view class="container">
+	<list @loadmore="getData()" :loadmoreoffset="wHeight*3" :show-scrollbar="false" ref="listBox" :pagingEnabled="true" :scrollable="true">
+		<cell v-for="(item,i) in dataList" :key="i">
+			<div ref="item" class="item"  :style="boxStyle">
+				<jVideo
+					v-if="Math.abs(k-i)<=1"
+					:state="item.state"
+					:src="item.src"
+					:boxStyle="boxStyle"
+				></jVideo>
+				<view class="videoHover" v-if="1" @click="tapVideoHover(item.state,$event)" :style="boxStyle">
+				  	<image v-if="item.state=='pause'" class="playState" src="../../static/img/index/play.png"></image>
+				</view>
+				<view class="userInfo" @appear="k=i">
+				 	<image class="userAvatar" src="https://ftp.bmp.ovh/imgs/2019/10/c9583cb026b4251f.jpeg"></image>
+				 	<view class="like" @click="cLike(item.video_id,item.like);item.like=!item.like">
+				 		<image v-if="item.like" class="likeIco" src="../../static/img/index/xinActive.png"/>
+				 		<image v-else class="likeIco" src="../../static/img/index/xin.png"/>
+				 		<text class="likeNum" :class="{'likeNumActive':item.like}">{{item.like_n}}</text>
+				 	</view>
+				 	<view class="comment" @click="toComment(i)">
+				 		<image class="commentIco" src="../../static/img/index/comment.png"></image>
+						<text style="color: #FFFFFF;">{{Math.abs(k-i)}}</text>
+				 	</view>
+				 	<view class="share" @click="share">
+				 		<image class="shareIco" src="../../static/img/index/share.png"></image>
+				 		<text class="shareTex">分享</text>
+				 	</view>
+				</view>
+				<view class="content">
+				 	<text class="userName">@{{item.title}}-i={{i}}</text>
+				 	<text class="words">{{item.msg}}-=-=---k={{k}}</text>
+				</view>
+			</div>
+		</cell>
+	</list>
+</view>
+</template>
+<script>
+import jVideo from './j-video.nvue';
+export default {
+		components: {jVideo},
+        data: {
+			dataList:[],
+			scrollTop:0,
+			oldScrollTop:0,
+			wHeight:0,
+			boxStyle:{
+				'height':'1000rpx',
+				'width':'750rpx',
+			},
+			k:0,
+			playIngIds:[],//正在播放的视频id列队，列队用于处理滑动过快导致的跳频问题
+			ready:false,
+			//isDragging:false//用户是否正在拖动列表
+        },
+		watch:{
+			k(k,old_k){
+				this.dataList[k].state = 'play'
+				this.dataList[old_k].state = 'stop'
+			},
+		},
+		onShow(){
+			console.log('回到前台');
+		},
+		onHide(){
+			console.log('到后台');
+		},
+		onLoad(){
+			this.wHeight = uni.getSystemInfoSync().screenHeight;
+			this.boxStyle.height = this.wHeight;
+			this.getData(e=>{
+				this.dataList[0].state = 'play';
+				this.ready = true;
+			});
+		},
+		onReady() {
+		},
+        methods: {
+			//点击播放&&暂停
+			tapVideoHover(state,event){
+				console.log('state--',state);
+				if(state=='play'||state=='continue'){
+					this.dataList[this.k].state = 'pause';
+				}else{
+					this.dataList[this.k].state = 'continue';
+				}
+			},
+			toComment(){
+				uni.showToast({
+					title:'抽屉式评论区域，敬请期待',
+					icon:'none'
+				})
+			},
+			share(){
+				uni.showToast({
+					title:'分享功能，敬请期待',
+					icon:'none'
+				})
+			},
+			cLike(video_id,sss){
+				const video = this.dataList[this.k];
+				sss?video.like_n -= 1:video.like_n += 1;
+			},
+			getData(callback=e=>{}){
+				for (let i = 0; i < 5; i++) {
+					this.dataList.push({
+						title:"超高性能的仿抖音插件；",
+						msg:"杜绝不灵敏的swiper组件模拟效果，有问题请加群反馈",
+						state : 'pause',
+						like :  i%2>0,
+						like_n : i,
+						src : 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-f184e7c3-1912-41b2-b81f-435d1b37c7b4/f4829677-6fb5-47e5-835f-267d562699fd.mp4',
+						videoImg : ''
+					});
+				}
+				setTimeout(e=>{//模拟接口请求时间为1秒
+					callback()
+				},1000);
+			}
+        }
+    }
+</script>
+<style>
+    .container {flex: 1;background-color: #eeeeee;}
+    .item {
+		width : 750rpx;
+		background-color: #000000;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+	}
+	.videoHover{
+		position: absolute;
+		top: 0;
+		left: 0;
+		flex: 1;
+		background-color: rgba(0,0,0,0.1);
+		justify-content: center;
+		align-items: center;
+		
+		/* border-style: dashed;
+		border-color: #DD524D;
+		border-width: 1px; */
+	}
+	.playState{
+		width:  80rpx;
+		height: 80rpx;
+	}
+	.userInfo{
+		position: absolute;
+		bottom:250rpx;
+		right: 15px;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		
+	}
+	.userAvatar{
+		border-radius: 500%;
+		margin-bottom: 15px;
+		border-style: solid;
+		border-width: 2px;
+		border-color: #ffffff;
+	}
+	.userAvatar{
+		width : 90rpx;
+		height: 90rpx;
+	}
+	.likeIco,.shareIco,.commentIco{
+		width : 60rpx;
+		height: 60rpx;
+		margin-top: 15px;
+	}
+	.likeNum,.commentNum,.shareTex{
+		color: #ffffff;
+		font-size: 30rpx;
+		text-align: center;
+		margin: 5px;
+	}
+	.likeNumActive{
+		color: red;
+	}
+	.content{
+	  width: 720rpx;
+	  z-index: 99;
+	  position: absolute;
+	  bottom: 10px;
+	  justify-content: center;
+	  padding: 15rpx;
+	  flex-direction: column;
+	  justify-content: flex-start;
+	  color: #ffffff;
+	}
+	.userName {
+	  font-size: 30rpx;
+	  color: #ffffff;
+	}
+	.words {
+	  margin-top: 10rpx;
+	  font-size: 30rpx;
+	  color: #ffffff;
+	}
+</style>

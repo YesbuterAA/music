@@ -1,0 +1,12 @@
+{
+  "navigationBarBackgroundColor": "#FAFAFA",
+  "scrollIndicator": "none",
+  "titleNView": false,
+  "backgroundColor": "#F9F9F9",
+  "usingComponents": {
+    "uni-card": "/uni_modules/uni-card/components/uni-card/uni-card",
+    "drawer": "/components/drawer/drawer",
+    "uni-popup": "/uni_modules/uni-popup/components/uni-popup/uni-popup",
+    "uni-popup-message": "/uni_modules/uni-popup/components/uni-popup-message/uni-popup-message"
+  }
+}
